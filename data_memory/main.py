@@ -33,7 +33,7 @@ def _reduce_float(df: pd.DataFrame, column):
         c1 = min_column > np.finfo(dtype).min
         c2 = max_column < np.finfo(dtype).max
         n = df[column].astype(dtype).unique().__len__()
-        c3 = n * 1.1 > n0
+        c3 = n * 1.01 > n0
         if c1 and c2 and c3:
             df[column] = df[column].astype(dtype)
             break
@@ -47,7 +47,7 @@ def _reduce_int(df: pd.DataFrame, column):
         c1 = min_column > np.iinfo(dtype).min
         c2 = max_column < np.iinfo(dtype).max
         n = df[column].astype(dtype).unique().__len__()
-        c3 = n * 1.1 > n0
+        c3 = n * 1.01 > n0
         if c1 and c2 and c3:
             df[column] = df[column].astype(dtype)
             break

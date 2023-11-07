@@ -1,14 +1,16 @@
 # dataframe-memory project
 
 
-This simple tools aims at providing simple solution to save memory when using pandas' data frame.
-It is highly inspired from this [kaggle post](https://www.kaggle.com/gemartin/load-data-reduce-memory-usage).
+This tools aims to provide simple solution to save memory when using pandas' data frame.
+It is highly inspired by this [kaggle post](https://www.kaggle.com/gemartin/load-data-reduce-memory-usage).
 
 > [!IMPORTANT]
-> The very basic principle : 
+> The very basic principle : for each column, this tool reduces int and float precision as much as possible so that
 >
-> - this tool reduces int and float precision without generating duplicates
-> - the data types are chosen so that the minimum and maximum values can be re-encoded
+> -  no duplicated values appear
+> -  the minimum and maximum can be re-encoded
+>   
+> For object data type, the function is trying to create category. 
 
 ### Usage
 

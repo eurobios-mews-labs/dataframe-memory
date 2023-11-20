@@ -65,7 +65,7 @@ def _reduce_int(df: pd.DataFrame, column, method):
 
 
 def reduce_memory(df: pd.DataFrame, verbose=False, dates=None,
-                  method="approx"):
+                  method="approx", use_categories=True):
     """
     Reduce the memory usage of a Pandas DataFrame by optimizing the data types
     of its columns.
@@ -79,6 +79,8 @@ def reduce_memory(df: pd.DataFrame, verbose=False, dates=None,
     - method (str, optional): The method used for optimization. Options are
      "approx" (default) or "exact". "approx" performs approximate memory
       reduction, while "exact" ensures exact reduction.
+    - use_category (str, optional): use category. Default is True.
+    
 
     Raises:
     - ValueError: If the specified method is not in ["approx", "exact"].
@@ -120,7 +122,7 @@ def reduce_memory(df: pd.DataFrame, verbose=False, dates=None,
             if column in dates:
                 df[column] = pd.to_datetime(df[column],
                                             format='%Y-%m-%d')
-            else:
+            elif use_categories:
                 nb_unique = len(df[column].unique())
                 if nb_unique / n < 0.5:
                     df[column] = df[column].astype('category')

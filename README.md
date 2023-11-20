@@ -1,4 +1,4 @@
-# dataframe-memory project
+# Dataframe Memory Project
 
 
 This tools aims to provide simple solution to save memory when using pandas' data frame.

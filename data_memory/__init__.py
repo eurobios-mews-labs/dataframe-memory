@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.#
 
-from data_memory.main import reduce_memory
+from data_memory.main import reduce_memory, memory_usage

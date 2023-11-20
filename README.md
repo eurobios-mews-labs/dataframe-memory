@@ -7,9 +7,9 @@ It is highly inspired by this [kaggle post](https://www.kaggle.com/gemartin/load
 > [!IMPORTANT]
 > The very basic principle : for each column, this tool reduces int and float precision as much as possible so that
 >
-> -  no duplicated values appear
-> -  the minimum and maximum can be re-encoded
->   
+> 1. **Approximate method** `method='approx'` : no duplicated values appear and  the minimum and maximum can be re-encoded
+> 2. **Exact method**   `method='exact'` : preserve absolute information by testing every value.
+> 
 > For object data type, the function is trying to create category. 
 
 ### Usage
@@ -26,7 +26,7 @@ df = pd.DataFrame(
          [7, 8, "ccc"]] * 10000),
     columns=['a', 'b', 'c'])
 
-reduce_memory(df, verbose=True)
+reduce_memory(df, method="exact", verbose=True)
 ````
 Yields the following decrease of memory
 ````text
@@ -46,7 +46,8 @@ df.info()
  2   c       30000 non-null  category
 ````
 
-> [!WARNING]
+> [!WARNING] 
+>  In `method='approx'`, 
 > 1. This tool **destroys** information and **should not be applied automatically** to any dataframe but big ones
 > 2. It preserves relative but not absolute information 
 

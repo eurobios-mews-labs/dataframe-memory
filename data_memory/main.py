@@ -25,35 +25,81 @@ def memory_usage(df: pd.DataFrame):
     return df.memory_usage(deep=True).sum() / 1024 ** 2
 
 
-def _reduce_float(df: pd.DataFrame, column):
+def _reduce_float(df: pd.DataFrame, column, method):
     max_column = df[column].max()
     min_column = df[column].min()
     n0 = df[column].unique().__len__()
     for dtype in FLOAT_DATATYPE:
         c1 = min_column > np.finfo(dtype).min
         c2 = max_column < np.finfo(dtype).max
-        n = df[column].astype(dtype).unique().__len__()
-        c3 = n * 1.01 > n0
-        if c1 and c2 and c3:
-            df[column] = df[column].astype(dtype)
-            break
+        if method == "approx":
+            n = df[column].astype(dtype).unique().__len__()
+            c3 = n * 1.01 > n0
+            if c1 and c2 and c3:
+                df[column] = df[column].astype(dtype)
+                break
+
+        elif method == "exact":
+            if all(np.array(df[column] == df[column].astype(dtype))):
+                df[column] = df[column].astype(dtype)
+                break
 
 
-def _reduce_int(df: pd.DataFrame, column):
+def _reduce_int(df: pd.DataFrame, column, method):
     max_column = df[column].max()
     min_column = df[column].min()
     n0 = df[column].unique().__len__()
     for dtype in INT_DATATYPE:
         c1 = min_column > np.iinfo(dtype).min
         c2 = max_column < np.iinfo(dtype).max
-        n = df[column].astype(dtype).unique().__len__()
-        c3 = n * 1.01 > n0
-        if c1 and c2 and c3:
-            df[column] = df[column].astype(dtype)
-            break
+        if method == "approx":
+            n = df[column].astype(dtype).unique().__len__()
+            c3 = n * 1.01 > n0
+            if c1 and c2 and c3:
+                df[column] = df[column].astype(dtype)
+                break
+        elif method == "exact":
+            if all(np.array(df[column] == df[column].astype(dtype))):
+                df[column] = df[column].astype(dtype)
+                break
 
 
-def reduce_memory(df: pd.DataFrame, verbose=False, dates=None):
+def reduce_memory(df: pd.DataFrame, verbose=False, dates=None,
+                  method="approx"):
+    """
+    Reduce the memory usage of a Pandas DataFrame by optimizing the data types
+    of its columns.
+
+    Parameters:
+    - df (pd.DataFrame): The input DataFrame to be memory-optimized.
+    - verbose (bool, optional): If True, print memory usage information before
+     and after optimization. Default is False.
+    - dates (list, optional): List of column names to be treated as date columns.
+     Default is None.
+    - method (str, optional): The method used for optimization. Options are
+     "approx" (default) or "exact". "approx" performs approximate memory
+      reduction, while "exact" ensures exact reduction.
+
+    Raises:
+    - ValueError: If the specified method is not in ["approx", "exact"].
+
+    Returns:
+    None: The function modifies the input DataFrame in place.
+
+    Example:
+    ```python
+    import pandas as pd
+
+    # Create a sample DataFrame
+    data = {'A': [1, 2, 3], 'B': [1.1, 2.2, 3.3], 'C': ['foo', 'bar', 'baz']}
+    df = pd.DataFrame(data)
+
+    # Reduce memory usage
+    reduce_memory(df, verbose=True)
+    ```
+    """
+    if method not in ["approx", "exact"]:
+        raise ValueError("wrong argument specification")
     memory_before = 0
     if dates is None:
         dates = []
@@ -65,10 +111,10 @@ def reduce_memory(df: pd.DataFrame, verbose=False, dates=None):
         column_type = str(df[column].dtypes)
 
         if 'int' in column_type:
-            _reduce_int(df, column)
+            _reduce_int(df, column, method)
 
         elif 'float' in column_type:
-            _reduce_float(df, column)
+            _reduce_float(df, column, method)
 
         elif 'object' in column_type:
             if column in dates:

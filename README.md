@@ -1,5 +1,7 @@
 # Dataframe Memory Project
 
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/eurobios-mews-labs/dataframe-memory/graphs/commit-activity)
+[![PyPI version](https://badge.fury.io/py/dataframe-memory.svg)](https://badge.fury.io/py/dataframe-memory)
 
 This tools aims to provide simple solution to save memory when using pandas' data frame.
 It is highly inspired by this [kaggle post](https://www.kaggle.com/gemartin/load-data-reduce-memory-usage).

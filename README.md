@@ -12,6 +12,13 @@ It is highly inspired by this [kaggle post](https://www.kaggle.com/gemartin/load
 > 
 > For object data type, the function is trying to create category. 
 
+### Installation
+
+
+```shell
+pip install dataframe-memory
+```
+
 ### Usage
 
 ````python

@@ -16,7 +16,7 @@ classifiers = [
 ]
 keywords = ["data", "dataframe"]
 requires-python = ">=3.6"
-
+readme = "README.md"
 dynamic = ["dependencies"]
 
 [tool.setuptools.dynamic]
